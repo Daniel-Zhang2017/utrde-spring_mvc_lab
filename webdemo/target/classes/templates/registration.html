@@ -10,19 +10,22 @@
 <body>
     <div class="form-container">
         <h1>Registration Form</h1>
-        <form action="/register" method="post">
+        <form action="/register" method="post" th:object="${registrationForm}">
+            <!-- First Name -->
             <label for="firstName">First Name:</label>
-            <input type="text" id="firstName" required>
+            <input type="text" id="firstName" th:field="*{firstName}" required>
+            <span th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}" class="error"></span>
             <br>
 
             <!-- Last Name -->
             <label for="lastName">Last Name:</label>
-            <input type="text" id="lastName" required>
+            <input type="text" id="lastName" th:field="*{lastName}" required>
+            <span th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}" class="error"></span>
             <br>
 
             <!-- Country -->
             <label for="country">Country:</label>
-            <select id="country" required>
+            <select id="country" th:field="*{country}" required>
                 <option value="">Select your country</option>
                 <option value="usa">United States</option>
                 <option value="canada">Canada</option>
@@ -30,16 +33,27 @@
                 <option value="australia">Australia</option>
                 <option value="india">India</option>
             </select>
+            <span th:if="${#fields.hasErrors('country')}" th:errors="*{country}" class="error"></span>
             <br>
 
             <!-- Date of Birth -->
             <label for="dob">Date of Birth:</label>
-            <input type="date" id="dob" required>
+            <input type="date" id="dob" th:field="*{dob}" required>
+            <span th:if="${#fields.hasErrors('dob')}" th:errors="*{dob}" class="error"></span>
             <br>
 
             <!-- Email -->
             <label for="email">Email:</label>
-            <input type="email" id="email" required>
+            <input type="email" id="email" th:field="*{email}" required>
+            <span th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="error"></span>
+            <br>
+            
+            <!-- Annual Income -->
+            <label for="annualIncome">Annual Income (USD):</label>
+            <input type="number" id="annualIncome" th:field="*{annualIncome}" 
+                   step="0.01" min="0" max="10000000" 
+                   placeholder="Enter your annual income" required>
+            <span th:if="${#fields.hasErrors('annualIncome')}" th:errors="*{annualIncome}" class="error"></span>
             <br>
 
             <!-- Submit Button -->
