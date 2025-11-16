@@ -10,6 +10,15 @@ import com.app.webdemo.model.RegistrationForm;
 
 import jakarta.validation.Valid;
 
+
+import org.springframework.web.bind.annotation.RequestParam; 
+import org.springframework.web.multipart.MultipartFile; 
+import org.springframework.web.servlet.mvc.support.RedirectAttributes; 
+import java.io.IOException; 
+import java.nio.file.Files; 
+import java.nio.file.Path; 
+import java.nio.file.Paths; 
+
 @Controller
 public class WebdemoController {
 
@@ -48,4 +57,35 @@ public class WebdemoController {
 
         return "success"; // returns Thymeleafe template success.html
     }
+
+    private static String UPLOADED_FOLDER = "uploads/"; 
+
+    // 显示文件上传页面 - GET 请求
+    @GetMapping("/upload")
+    public String showUploadForm() {
+        return "upload"; // 返回 upload.html
+    }
+   
+    @PostMapping("/upload") 
+    public String singleFileUpload(@RequestParam("file") MultipartFile file, 
+                                   RedirectAttributes redirectAttributes) { 
+        if (file.isEmpty()) { 
+            redirectAttributes.addFlashAttribute("message", "Please select a file to upload"); 
+            return "redirect:/uploadStatus"; 
+        } 
+        try { 
+            byte[] bytes = file.getBytes(); 
+            Path path = Paths.get(UPLOADED_FOLDER + file.getOriginalFilename()); 
+            Files.write(path, bytes); 
+            redirectAttributes.addFlashAttribute("message", 
+                    "You successfully uploaded '" + file.getOriginalFilename() + "'"); 
+        } catch (IOException e) { 
+            e.printStackTrace(); 
+        } 
+        return "redirect:/uploadStatus"; 
+    } 
+    @GetMapping("/uploadStatus") 
+    public String uploadStatus() { 
+        return "uploadStatus"; 
+    } 
 }
